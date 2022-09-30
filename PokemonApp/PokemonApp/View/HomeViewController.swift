@@ -32,27 +32,41 @@ class HomeViewController: UIViewController {
         
         tableView.dataSource = self
         
+        tableView.prefetchDataSource = self
+        
         tableView.delegate = self
         
-        viewModel.pokemonsViewModel.bind { _ in
+        viewModel.startRefreshHandler = {
             
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.refreshControl.beginRefreshing()
             }
         }
         
-        viewModel.startRefreshHandler = { [weak self] in
+        viewModel.endRefreshHandler = {
             
-            self?.refreshControl.beginRefreshing()
-            
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+            }
         }
         
-        viewModel.endRefreshHandler = { [weak self] in
+        viewModel.indexPathToReload.bind { [weak self] newIndexPathsToReload in
             
-            self?.refreshControl.endRefreshing()
+            guard let self = self else { return }
+            
+            guard !newIndexPathsToReload.isEmpty else {
+                
+                self.tableView.reloadData()
+                
+                return 
+            }
+            
+            let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToReload)
+            
+            self.tableView.reloadRows(at: indexPathsToReload, with: .automatic)
         }
         
-        viewModel.fetchData(paging: nil)
+        viewModel.fetchData()
         
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     }
@@ -75,14 +89,14 @@ class HomeViewController: UIViewController {
     
     @objc private func refreshData() {
         
-        viewModel.fetchData(paging: nil)
+        viewModel.fetchData()
     }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.pokemonsViewModel.value.count
+        viewModel.totalCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,9 +107,16 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             fatalError("Cannot dequeue PokemonListCell")
         }
         
-        let resultViewModel = viewModel.pokemonsViewModel.value[indexPath.row]
-        
-        cell.configureCell(with: resultViewModel)
+        if isLoadingCell(for: indexPath) {
+            
+            cell.configureCell(with: .none)
+            
+        } else {
+            
+            let resultViewModel = viewModel.pokemonsViewModel[indexPath.row]
+            
+            cell.configureCell(with: resultViewModel)
+        }
         
         return cell
     }
@@ -106,11 +127,39 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let pokemonViewModel = viewModel.pokemonsViewModel.value[indexPath.row]
+        let pokemonViewModel = viewModel.pokemonsViewModel[indexPath.row]
         
         let detailVC = DetailViewController(pokemonName: pokemonViewModel.name,
                                             pokemonUrl: pokemonViewModel.url)
         
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
+extension HomeViewController: UITableViewDataSourcePrefetching {
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        
+        if indexPaths.contains(where: isLoadingCell) {
+            
+            viewModel.fetchData()
+        }
+    }
+}
+
+private extension HomeViewController {
+    
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        
+        indexPath.row >= viewModel.currentCount
+    }
+    
+    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
+        
+        let indexPathsForVisibleRows = tableView.indexPathsForVisibleRows ?? []
+        
+        let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
+        
+        return Array(indexPathsIntersection)
     }
 }

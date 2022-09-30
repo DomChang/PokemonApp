@@ -9,7 +9,7 @@ import Foundation
 
 class PokemonProvider {
     
-    typealias PokemonDataHandler = (Result<[PokemonResult], Error>) -> Void
+    typealias PokemonDataHandler = (Result<PokemonData, Error>) -> Void
     
     typealias PokemonDetailHandler = (Result<Pokemon, Error>) -> Void
     
@@ -27,10 +27,8 @@ class PokemonProvider {
                 do {
                     let pokemonData = try self.decoder.decode(PokemonData.self, from: data)
                     
-                    let pokemonResult = pokemonData.results
-                    
                     DispatchQueue.main.async {
-                        completion(.success(pokemonResult))
+                        completion(.success(pokemonData))
                     }
                 } catch {
                     

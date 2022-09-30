@@ -9,37 +9,80 @@ import Foundation
 
 class HomeViewModel {
     
-    let pokemonsViewModel = Box([PokemonResultViewModel]())
+    var pokemonsViewModel = [PokemonResultViewModel]()
+    
+    let indexPathToReload = Box([IndexPath]())
     
     var startRefreshHandler: (() -> Void)?
     
     var endRefreshHandler: (() -> Void)?
     
+    var totalCount = 0
+    
+    var fetchCompletedHandler: (([IndexPath]) -> Void)?
+    
     private let pokemonProvider = PokemonProvider()
     
-    func fetchData(paging: Int?) {
+    private var currentPage = 0
+    
+    private var isFetching = false
+    
+    var currentCount: Int {
         
-        startRefreshHandler?()
+        pokemonsViewModel.count
+    }
+    
+    func fetchData() {
         
-        pokemonProvider.fetchPokemonList(paging: paging) { [weak self] result in
+        guard !isFetching else { return }
+        
+        isFetching = true
+        
+        pokemonProvider.fetchPokemonList(paging: currentPage) { [weak self] result in
             
             guard let self = self else { return }
             
             switch result {
                 
-            case .success(let pokemonResults):
+            case .success(let pokemonData):
                 
-                self.pokemonsViewModel.value = pokemonResults.map {
+                let pokemonResults = pokemonData.results
+                
+                self.totalCount = pokemonData.count
+                
+                self.pokemonsViewModel.append(contentsOf: pokemonResults.map {
                     
                     PokemonResultViewModel(model: $0)
+                })
+                
+                if self.currentPage > 0 {
+                    
+                    self.indexPathToReload.value = self.calculateIndexPathsToReload(from: pokemonResults)
+                    
+                } else {
+                    
+                    self.indexPathToReload.value = []
                 }
+                
+                self.currentPage += 1
                 
             case .failure(let error):
                 
                 print("fetchData.failure: \(error)")
             }
             
+            self.isFetching = false
+            
             self.endRefreshHandler?()
         }
+    }
+    
+    private func calculateIndexPathsToReload(from newPokemonResults: [PokemonResult]) -> [IndexPath] {
+        
+        let startIndex = pokemonsViewModel.count - newPokemonResults.count
+        
+        let endIndex = startIndex + newPokemonResults.count
+        
+        return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
     }
 }

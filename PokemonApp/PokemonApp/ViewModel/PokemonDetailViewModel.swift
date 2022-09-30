@@ -20,7 +20,7 @@ struct PokemonDetailViewModel {
         "\(pokemon.id)"
     }
     
-    var imageUrl: String {
+    var imageUrl: String? {
         pokemon.sprites.frontDefault
     }
     
