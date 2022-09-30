@@ -28,7 +28,7 @@ struct Pokemon: Codable {
     let sprites: Sprites
     let height: Int
     let weight: Int
-    let types: [Attribute]
+    let types: [TypeElement]
 }
 
 // MARK: - Sprites

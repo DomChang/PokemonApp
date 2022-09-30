@@ -7,9 +7,9 @@
 
 import Foundation
 
-class PokemonResultViewModel {
+struct PokemonResultViewModel {
     
-    let pokemonResult: PokemonResult
+    private let pokemonResult: PokemonResult
     
     init(model pokemonResult: PokemonResult) {
         self.pokemonResult = pokemonResult
@@ -19,7 +19,7 @@ class PokemonResultViewModel {
         pokemonResult.name
     }
     
-    var url: URL? {
-        URL(string: pokemonResult.url)
+    var url: String {
+        pokemonResult.url
     }
 }

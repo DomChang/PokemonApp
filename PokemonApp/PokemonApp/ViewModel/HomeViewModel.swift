@@ -30,6 +30,7 @@ class HomeViewModel {
             case .success(let pokemonResults):
                 
                 self.pokemonsViewModel.value = pokemonResults.map {
+                    
                     PokemonResultViewModel(model: $0)
                 }
                 

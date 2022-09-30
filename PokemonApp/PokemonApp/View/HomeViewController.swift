@@ -18,12 +18,12 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setUp()
+        setup()
         style()
         layout()
     }
     
-    private func setUp() {
+    private func setup() {
         
         navigationItem.title = "Pokemon"
         
@@ -102,5 +102,15 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         50
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let pokemonViewModel = viewModel.pokemonsViewModel.value[indexPath.row]
+        
+        let detailVC = DetailViewController(pokemonName: pokemonViewModel.name,
+                                            pokemonUrl: pokemonViewModel.url)
+        
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

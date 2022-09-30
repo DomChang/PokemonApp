@@ -5,7 +5,7 @@
 //  Created by ChunKai Chang on 2022/9/29.
 //
 
-import Foundation
+import UIKit
 
 enum HTTPError: Error {
     
@@ -29,6 +29,8 @@ class HTTPClient {
     private let decoder = JSONDecoder()
     
     private let encoder = JSONEncoder()
+    
+    private let imageCache = NSCache<NSURL, UIImage>()
     
     private init() { }
     
@@ -93,5 +95,27 @@ class HTTPClient {
                 }
                 
             }).resume()
+    }
+    
+    func fetchImage(url: URL, completionHandler: @escaping (UIImage?) -> Void) {
+        
+        if let image = imageCache.object(forKey: url as NSURL) {
+            
+            completionHandler(image)
+            
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            if let data = data, let image = UIImage(data: data) {
+                
+                self.imageCache.setObject(image, forKey: url as NSURL)
+                
+                completionHandler(image)
+            } else {
+                completionHandler(nil)
+            }
+        }.resume()
     }
 }
