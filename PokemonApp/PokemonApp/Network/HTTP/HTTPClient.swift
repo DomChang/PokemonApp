@@ -45,7 +45,7 @@ class HTTPClient {
             
         case false:
             parameters = ["limit": "20",
-                          "offset": String(20 * (paging! - 1))]
+                          "offset": String(20 * paging!)]
         }
         
         guard var component = URLComponents(string: baseUrl)
@@ -53,6 +53,7 @@ class HTTPClient {
         else { return completion(.failure(HTTPError.urlError)) }
         
         if let parameters = parameters {
+            
             component.queryItems = parameters.map { (key, value) in
                 
                 URLQueryItem(name: key, value: value)
