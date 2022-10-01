@@ -14,13 +14,17 @@ protocol PokemonListCellDelegate: AnyObject {
 
 class PokemonListCell: UITableViewCell {
     
-    let nameLabel = UILabel()
-    
-    private let starButton = UIButton()
-    
     var pokemonResultViewModel: PokemonResultViewModel?
     
     weak var delegate: PokemonListCellDelegate?
+    
+    private let idLabel = UILabel()
+    
+    private let nameLabel = UILabel()
+    
+    private let starButton = UIButton()
+    
+    private let pokemonImageView = UIImageView()
     
     private let indicatorView = UIActivityIndicatorView()
 
@@ -40,6 +44,8 @@ class PokemonListCell: UITableViewCell {
         super.prepareForReuse()
         
         configureCell(with: .none, isStar: false)
+        
+        starButton.tintColor = .darkGray
     }
     
     private func setup() {
@@ -54,22 +60,44 @@ class PokemonListCell: UITableViewCell {
     
     private func styleObject() {
         
-        nameLabel.font = UIFont.systemFont(ofSize: 16)
+        pokemonImageView.contentMode = .scaleAspectFill
+        pokemonImageView.clipsToBounds = true
+        
+        idLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        idLabel.textColor = .darkGray
+        
+        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        nameLabel.textColor = .darkGray
+        nameLabel.adjustsFontSizeToFitWidth = true
         
         starButton.setImage(.systemAsset(.star), for: .normal)
         starButton.setImage(.systemAsset(.starFill), for: .selected)
+        
         starButton.tintColor = .darkGray
     }
     
     private func layout() {
         
-        contentView.addSubview(nameLabel)
+        let vStack = UIStackView(arrangedSubviews: [idLabel, nameLabel])
+        vStack.axis = .vertical
+        vStack.distribution = .equalSpacing
+        vStack.spacing = 5
+        
+        contentView.addSubview(pokemonImageView)
+        contentView.addSubview(vStack)
         contentView.addSubview(starButton)
         contentView.addSubview(indicatorView)
         
-        nameLabel.anchor(leading: leadingAnchor,
+        pokemonImageView.anchor(leading: leadingAnchor,
+                                centerY: centerYAnchor,
+                                width: 80,
+                                height: 80,
+                                padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+        
+        vStack.anchor(leading: pokemonImageView.trailingAnchor,
+                         trailing: starButton.leadingAnchor,
                          centerY: centerYAnchor,
-                         padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+                         padding: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 8))
         
         starButton.anchor(trailing: trailingAnchor,
                           centerY: centerYAnchor,
@@ -87,29 +115,59 @@ class PokemonListCell: UITableViewCell {
             
             self.pokemonResultViewModel = viewModel
             
-            nameLabel.text = viewModel.name
+            pokemonImageView.setImage(urlString: viewModel.imageUrl,
+                                      placeholderImage: .asset(.ball_placeholer))
             
-            starButton.isHidden = false
-            
-            indicatorView.stopAnimating()
+            DispatchQueue.main.async {
+                
+                self.idLabel.text = "# " + viewModel.id
+                
+                self.nameLabel.text = viewModel.name
+                
+                self.starButton.isHidden = false
+                
+                self.indicatorView.stopAnimating()
+            }
             
         } else {
             
-            nameLabel.text = ""
-            
-            starButton.isHidden = true
-            
-            indicatorView.startAnimating()
+            DispatchQueue.main.async {
+                
+                self.idLabel.text = ""
+                
+                self.nameLabel.text = ""
+                
+                self.starButton.isHidden = true
+                
+                self.pokemonImageView.image = nil
+                
+                self.indicatorView.startAnimating()
+            }
         }
         
         starButton.isSelected = isStar
+        
+        updateStarButton()
     }
     
     @objc private func didTapStar() {
         
         starButton.isSelected = !starButton.isSelected
         
+        updateStarButton()
+        
         self.delegate?.didTapStar(with: self,
                                   isStar: starButton.isSelected)
+    }
+    
+    private func updateStarButton() {
+        
+        if starButton.isSelected {
+            
+            starButton.tintColor = .systemOrange
+        } else {
+            
+            starButton.tintColor = .darkGray
+        }
     }
 }

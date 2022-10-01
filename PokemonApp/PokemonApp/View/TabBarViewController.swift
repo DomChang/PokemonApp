@@ -67,14 +67,53 @@ class TabBarViewController: UITabBarController {
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
         tabBarAppearance.backgroundColor = .white
+        tabBarAppearance.stackedLayoutAppearance.normal.badgeBackgroundColor = .orange
+        tabBar.tintColor = .black
         tabBar.scrollEdgeAppearance = tabBarAppearance
         tabBar.standardAppearance = tabBarAppearance
         
         let navBarAppearance =  UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .white
+        navBarAppearance.backgroundColor = UIColor(red: 181/255, green: 8/255, blue: 8/255, alpha: 100)
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white,
+                                                .font: UIFont.systemFont(ofSize: 20, weight: .bold)]
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().compactAppearance = navBarAppearance
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateBadge),
+                                               name: .didChangeFavorite,
+                                               object: nil)
+        
+        updateBadge()
+    }
+    
+    @objc private func updateBadge() {
+        
+        StorageManager.shared.fetchPokemons { result in
+            
+            switch result {
+                
+            case .success(let lsPokemons):
+                
+                let badgeCount = lsPokemons.count
+                
+                DispatchQueue.main.async {
+                    
+                    if badgeCount > 0 {
+                        
+                        self.tabBar.items?[1].badgeValue = "\(lsPokemons.count)"
+                    } else {
+                        
+                        self.tabBar.items?[1].badgeValue = nil
+                    }
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
     }
 }
 

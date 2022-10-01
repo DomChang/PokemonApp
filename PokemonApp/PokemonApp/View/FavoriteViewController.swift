@@ -90,6 +90,10 @@ extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate {
         
         navigationController?.pushViewController(detailVC, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        100
+    }
 }
 
 extension FavoriteViewController: PokemonListCellDelegate {
@@ -100,8 +104,6 @@ extension FavoriteViewController: PokemonListCellDelegate {
               let id = cell.pokemonResultViewModel?.id else { return }
         
         viewModel.removePokemon(id: id)
-        
-        viewModel.favoritePokemonViewModels.remove(at: indexPath.row)
         
         tableView.deleteRows(at: [indexPath], with: .left)
     }

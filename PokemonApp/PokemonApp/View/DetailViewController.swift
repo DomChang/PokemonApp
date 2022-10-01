@@ -35,7 +35,8 @@ class DetailViewController: UIViewController {
     
     private var pokemonResultViewModel: PokemonResultViewModel
     
-    init(pokemonResultViewModel: PokemonResultViewModel, storageViewModel: FavoriteViewModel) {
+    init(pokemonResultViewModel: PokemonResultViewModel,
+         storageViewModel: FavoriteViewModel) {
         
         self.pokemonResultViewModel = pokemonResultViewModel
         
@@ -72,6 +73,8 @@ class DetailViewController: UIViewController {
         
         navigationItem.title = "\(pokemonResultViewModel.name)"
         
+        navigationController?.navigationBar.tintColor = .white
+        
         view.backgroundColor = .white
         
         starButton.addTarget(self, action: #selector(didTapStar),
@@ -96,13 +99,15 @@ class DetailViewController: UIViewController {
             if let id = self.viewModel.pokemonViewModel.value?.id {
                 
                 self.starButton.isSelected = self.storageViewModel.checkIsStar(id: id)
+                
+                self.updateStarButton()
             }
             
             self.starButton.isHidden = false
             
-            guard let imageUrl = pokemonDetailViewModel?.imageUrl else { return }
+            let imageUrl = self.pokemonResultViewModel.imageUrl
             
-            self.imageView.setImage(urlString: imageUrl)
+            self.imageView.setImage(urlString: imageUrl, placeholderImage: .asset(.ball_placeholer))
         }
         
         viewModel.fetchDetail()
@@ -196,6 +201,19 @@ class DetailViewController: UIViewController {
         } else {
             
             storageViewModel.removePokemon(id: pokemonResultViewModel.id)
+        }
+        
+        updateStarButton()
+    }
+    
+    private func updateStarButton() {
+        
+        if starButton.isSelected {
+            
+            starButton.tintColor = .systemOrange
+        } else {
+            
+            starButton.tintColor = .darkGray
         }
     }
 }

@@ -31,4 +31,11 @@ struct PokemonResultViewModel {
         
         return id
     }
+    
+    var imageUrl: String {
+        
+        let urlString = PAConstant.imageBaseUrl.rawValue + "\(id)" + ".png"
+        
+        return urlString
+    }
 }

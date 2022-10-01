@@ -10,4 +10,6 @@ import Foundation
 enum PAConstant: String {
     
     case pokemonBaseUrl = "https://pokeapi.co/api/v2/pokemon?"
+    
+    case imageBaseUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
 }

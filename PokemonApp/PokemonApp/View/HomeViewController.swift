@@ -9,7 +9,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let tableView = UITableView()
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     private let refreshControl = UIRefreshControl()
     
@@ -75,9 +75,7 @@ class HomeViewController: UIViewController {
                 return 
             }
             
-            let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToReload)
-            
-            self.tableView.reloadRows(at: indexPathsToReload, with: .automatic)
+            self.tableView.reloadRows(at: newIndexPathsToReload, with: .fade)
         }
         
         viewModel.fetchData()
@@ -129,7 +127,11 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.configureCell(with: .none, isStar: false)
             
+            cell.isUserInteractionEnabled = false
+            
         } else {
+            
+            cell.isUserInteractionEnabled = true
             
             let resultViewModel = viewModel.pokemonViewModels[indexPath.row]
             
@@ -143,7 +145,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        50
+        100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -166,22 +168,10 @@ extension HomeViewController: UITableViewDataSourcePrefetching {
             viewModel.fetchData()
         }
     }
-}
-
-private extension HomeViewController {
     
-    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+    private func isLoadingCell(for indexPath: IndexPath) -> Bool {
         
         indexPath.row >= viewModel.currentCount
-    }
-    
-    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
-        
-        let indexPathsForVisibleRows = tableView.indexPathsForVisibleRows ?? []
-        
-        let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
-        
-        return Array(indexPathsIntersection)
     }
 }
 

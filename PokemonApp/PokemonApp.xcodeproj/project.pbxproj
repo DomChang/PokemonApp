@@ -11,6 +11,7 @@
 		B63D1A9328E81F6600BFE186 /* FavoriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1A9228E81F6600BFE186 /* FavoriteViewModel.swift */; };
 		B63D1A9C28E8366500BFE186 /* LSPokemon+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1A9A28E8366500BFE186 /* LSPokemon+CoreDataClass.swift */; };
 		B63D1A9D28E8366500BFE186 /* LSPokemon+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1A9B28E8366500BFE186 /* LSPokemon+CoreDataProperties.swift */; };
+		B63D1A9F28E8886B00BFE186 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */; };
 		B645904C28E5CCD000BDE6C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645904B28E5CCD000BDE6C0 /* AppDelegate.swift */; };
 		B645904E28E5CCD000BDE6C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645904D28E5CCD000BDE6C0 /* SceneDelegate.swift */; };
 		B645905028E5CCD000BDE6C0 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645904F28E5CCD000BDE6C0 /* TabBarViewController.swift */; };
@@ -42,6 +43,7 @@
 		B63D1A9228E81F6600BFE186 /* FavoriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewModel.swift; sourceTree = "<group>"; };
 		B63D1A9A28E8366500BFE186 /* LSPokemon+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LSPokemon+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B63D1A9B28E8366500BFE186 /* LSPokemon+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LSPokemon+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		B645904828E5CCD000BDE6C0 /* PokemonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B645904B28E5CCD000BDE6C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B645904D28E5CCD000BDE6C0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				B645907128E68CAC00BDE6C0 /* UITableViewCell+Extension.swift */,
 				B645908728E6EC4B00BDE6C0 /* UIImageView+Extension.swift */,
 				B6B9C7DF28E7E9B500F7CB5F /* UIImage+Extension.swift */,
+				B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				B645907A28E69DC400BDE6C0 /* PokemonResultViewModel.swift in Sources */,
 				B645908828E6EC4B00BDE6C0 /* UIImageView+Extension.swift in Sources */,
 				B645904C28E5CCD000BDE6C0 /* AppDelegate.swift in Sources */,
+				B63D1A9F28E8886B00BFE186 /* Notification+Extension.swift in Sources */,
 				B63D1A9128E81D7E00BFE186 /* FavoriteViewController.swift in Sources */,
 				B645904E28E5CCD000BDE6C0 /* SceneDelegate.swift in Sources */,
 				B63D1A9C28E8366500BFE186 /* LSPokemon+CoreDataClass.swift in Sources */,

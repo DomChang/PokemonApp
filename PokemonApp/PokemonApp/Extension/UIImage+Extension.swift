@@ -18,10 +18,20 @@ enum SystemImageAsset: String {
     case starFill = "star.fill"
 }
 
+enum ImageAsset: String {
+    
+    case ball_placeholer
+}
+
 extension UIImage {
 
     static func systemAsset(_ asset: SystemImageAsset) -> UIImage? {
 
         return UIImage(systemName: asset.rawValue)
+    }
+    
+    static func asset(_ asset: ImageAsset) -> UIImage? {
+
+        return UIImage(named: asset.rawValue)
     }
 }

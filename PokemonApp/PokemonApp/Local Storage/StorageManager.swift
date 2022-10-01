@@ -53,6 +53,8 @@ class StorageManager {
                 
                 try context.save()
                 
+                NotificationCenter.default.post(name: .didChangeFavorite, object: nil)
+
                 completion(.success(()))
                 
             } catch {

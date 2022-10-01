@@ -52,6 +52,8 @@ class FavoriteViewModel {
                     
                     self.completeHandler?("Save Success")
                     
+                    self.favoritePokemonViewModels.append(pokemonResultViewModel)
+                    
                 case .failure(let error):
                     
                     self.errorHandler?(error)
@@ -72,6 +74,8 @@ class FavoriteViewModel {
                     
                 case .success:
                     
+                    self.favoritePokemonViewModels = self.favoritePokemonViewModels.filter { $0.id != id }
+                    
                     self.completeHandler?("Remove Success")
                     
                 case .failure(let error):
@@ -84,7 +88,7 @@ class FavoriteViewModel {
     
     func checkIsStar(id: String) -> Bool {
         
-        lsPokemons.contains(where: { $0.id == id })
+        favoritePokemonViewModels.contains(where: { $0.id == id })
     }
     
     func deleteAll() {

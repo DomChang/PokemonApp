@@ -9,14 +9,25 @@ import UIKit
 
 extension UIImageView {
 
-    func setImage(urlString: String) {
+    func setImage(urlString: String?, placeholderImage: UIImage?) {
         
-        guard let url = URL(string: urlString) else { return }
+        if placeholderImage != nil {
+            
+            self.image = placeholderImage
+        }
+        
+        guard let urlString = urlString,
+              let url = URL(string: urlString) else {
+            
+            self.image = placeholderImage
+            return
+        }
         
         HTTPClient.shared.fetchImage(url: url) { image in
             
             DispatchQueue.main.async {
-                self.image = image
+                
+                self.image = image ?? placeholderImage
             }
         }
     }
