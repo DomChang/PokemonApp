@@ -11,6 +11,8 @@ private enum Tab {
 
     case home
     
+    case favorite
+    
     func controller() -> UIViewController {
         
         var controller: UIViewController
@@ -18,6 +20,8 @@ private enum Tab {
         switch self {
             
         case .home: controller = UINavigationController(rootViewController: HomeViewController())
+            
+        case .favorite: controller = UINavigationController(rootViewController: FavoriteViewController())
             
         }
         
@@ -35,8 +39,15 @@ private enum Tab {
         case .home:
             return UITabBarItem(
                 title: "Home",
-                image: nil,
-                selectedImage: nil
+                image: .systemAsset(.house),
+                selectedImage: .systemAsset(.houseFill)
+            )
+            
+        case .favorite:
+            return UITabBarItem(
+                title: "Favorite",
+                image: .systemAsset(.star),
+                selectedImage: .systemAsset(.starFill)
             )
         }
     }
@@ -44,7 +55,7 @@ private enum Tab {
 
 class TabBarViewController: UITabBarController {
     
-    private let tabs: [Tab] = [.home]
+    private let tabs: [Tab] = [.home, .favorite]
 
     override func viewDidLoad() {
         super.viewDidLoad()

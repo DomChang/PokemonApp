@@ -14,6 +14,8 @@ class HomeViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     
     private let viewModel = HomeViewModel()
+    
+    private let storageViewModel = FavoriteViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +23,18 @@ class HomeViewController: UIViewController {
         setup()
         style()
         layout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        storageViewModel.fetchFavorite {
+            
+            DispatchQueue.main.async {
+                
+                self.tableView.reloadData()
+            }
+        }
     }
     
     private func setup() {
@@ -89,7 +103,11 @@ class HomeViewController: UIViewController {
     
     @objc private func refreshData() {
         
+        viewModel.currentPage = 0
+        
         viewModel.fetchData()
+        
+        storageViewModel.fetchFavorite(completion: nil)
     }
 }
 
@@ -109,13 +127,16 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         
         if isLoadingCell(for: indexPath) {
             
-            cell.configureCell(with: .none)
+            cell.configureCell(with: .none, isStar: false)
             
         } else {
             
-            let resultViewModel = viewModel.pokemonsViewModel[indexPath.row]
+            let resultViewModel = viewModel.pokemonViewModels[indexPath.row]
             
-            cell.configureCell(with: resultViewModel)
+            cell.configureCell(with: resultViewModel,
+                               isStar: storageViewModel.checkIsStar(id: resultViewModel.id))
+            
+            cell.delegate = self
         }
         
         return cell
@@ -127,10 +148,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let pokemonViewModel = viewModel.pokemonsViewModel[indexPath.row]
+        let pokemonViewModel = viewModel.pokemonViewModels[indexPath.row]
         
-        let detailVC = DetailViewController(pokemonName: pokemonViewModel.name,
-                                            pokemonUrl: pokemonViewModel.url)
+        let detailVC = DetailViewController(pokemonResultViewModel: pokemonViewModel,
+                                            storageViewModel: storageViewModel)
         
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -161,5 +182,23 @@ private extension HomeViewController {
         let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
         
         return Array(indexPathsIntersection)
+    }
+}
+
+extension HomeViewController: PokemonListCellDelegate {
+    
+    func didTapStar(with cell: PokemonListCell, isStar: Bool) {
+        
+        guard let pokemonResultViewModel = cell.pokemonResultViewModel else {
+            return
+        }
+        
+        if isStar {
+            
+            storageViewModel.savePokemon(with: pokemonResultViewModel)
+        } else {
+            
+            storageViewModel.removePokemon(id: pokemonResultViewModel.id)
+        }
     }
 }

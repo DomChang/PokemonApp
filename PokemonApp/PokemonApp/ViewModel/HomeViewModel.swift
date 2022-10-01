@@ -9,7 +9,7 @@ import Foundation
 
 class HomeViewModel {
     
-    var pokemonsViewModel = [PokemonResultViewModel]()
+    var pokemonViewModels = [PokemonResultViewModel]()
     
     let indexPathToReload = Box([IndexPath]())
     
@@ -19,17 +19,17 @@ class HomeViewModel {
     
     var totalCount = 0
     
+    var currentPage = 0
+    
     var fetchCompletedHandler: (([IndexPath]) -> Void)?
     
     private let pokemonProvider = PokemonProvider()
-    
-    private var currentPage = 0
     
     private var isFetching = false
     
     var currentCount: Int {
         
-        pokemonsViewModel.count
+        pokemonViewModels.count
     }
     
     func fetchData() {
@@ -50,16 +50,21 @@ class HomeViewModel {
                 
                 self.totalCount = pokemonData.count
                 
-                self.pokemonsViewModel.append(contentsOf: pokemonResults.map {
-                    
-                    PokemonResultViewModel(model: $0)
-                })
-                
                 if self.currentPage > 0 {
+                    
+                    self.pokemonViewModels.append(contentsOf: pokemonResults.map {
+                        
+                        PokemonResultViewModel(model: $0)
+                    })
                     
                     self.indexPathToReload.value = self.calculateIndexPathsToReload(from: pokemonResults)
                     
                 } else {
+                    
+                    self.pokemonViewModels = pokemonResults.map {
+                        
+                        PokemonResultViewModel(model: $0)
+                    }
                     
                     self.indexPathToReload.value = []
                 }
@@ -79,7 +84,7 @@ class HomeViewModel {
     
     private func calculateIndexPathsToReload(from newPokemonResults: [PokemonResult]) -> [IndexPath] {
         
-        let startIndex = pokemonsViewModel.count - newPokemonResults.count
+        let startIndex = pokemonViewModels.count - newPokemonResults.count
         
         let endIndex = startIndex + newPokemonResults.count
         

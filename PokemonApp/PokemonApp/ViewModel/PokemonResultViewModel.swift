@@ -22,4 +22,13 @@ struct PokemonResultViewModel {
     var url: String {
         pokemonResult.url
     }
+    
+    var id: String {
+        
+        guard let url = URL(string: pokemonResult.url) else { return "" }
+        
+        let id = url.lastPathComponent
+        
+        return id
+    }
 }

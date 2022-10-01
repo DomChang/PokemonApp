@@ -9,11 +9,7 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
-    let pokemonName: String
-    
-    let pokemonUrl: String
-    
-    private lazy var viewModel = DetailViewModel(pokemonUrl: pokemonUrl)
+    private lazy var viewModel = DetailViewModel(pokemonUrl: pokemonResultViewModel.url)
     
     private let idTitleLabel = UILabel()
     
@@ -33,9 +29,18 @@ class DetailViewController: UIViewController {
     
     private let typeLabel = UILabel()
     
-    init(pokemonName: String, pokemonUrl: String) {
-        self.pokemonName = pokemonName
-        self.pokemonUrl = pokemonUrl
+    private let starButton = UIButton()
+    
+    private var storageViewModel: FavoriteViewModel
+    
+    private var pokemonResultViewModel: PokemonResultViewModel
+    
+    init(pokemonResultViewModel: PokemonResultViewModel, storageViewModel: FavoriteViewModel) {
+        
+        self.pokemonResultViewModel = pokemonResultViewModel
+        
+        self.storageViewModel = storageViewModel
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,11 +56,30 @@ class DetailViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setup() {
         
-        navigationItem.title = "\(pokemonName)"
+        navigationItem.title = "\(pokemonResultViewModel.name)"
         
         view.backgroundColor = .white
+        
+        starButton.addTarget(self, action: #selector(didTapStar),
+                             for: .touchUpInside)
+        
+        starButton.isHidden = true
+        
+        storageViewModel.fetchFavorite(completion: nil)
         
         viewModel.pokemonViewModel.bind { [weak self] pokemonDetailViewModel in
             
@@ -69,12 +93,20 @@ class DetailViewController: UIViewController {
             
             self.typeLabel.text = pokemonDetailViewModel?.type.joined(separator: ", ")
             
+            if let id = self.viewModel.pokemonViewModel.value?.id {
+                
+                self.starButton.isSelected = self.storageViewModel.checkIsStar(id: id)
+            }
+            
+            self.starButton.isHidden = false
+            
             guard let imageUrl = pokemonDetailViewModel?.imageUrl else { return }
             
             self.imageView.setImage(urlString: imageUrl)
         }
         
         viewModel.fetchDetail()
+        
     }
     
     private func style() {
@@ -98,6 +130,11 @@ class DetailViewController: UIViewController {
         typeTitleLabel.font = .systemFont(ofSize: 16)
         
         typeLabel.font = .systemFont(ofSize: 16)
+        
+        starButton.setImage(.systemAsset(.star), for: .normal)
+        starButton.setImage(.systemAsset(.starFill), for: .selected)
+        starButton.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 30), forImageIn: .normal)
+        starButton.tintColor = .darkGray
     }
     
     private func layout() {
@@ -127,18 +164,38 @@ class DetailViewController: UIViewController {
         VStack.distribution = .fillEqually
         
         view.addSubview(imageView)
+        view.addSubview(starButton)
         view.addSubview(VStack)
         
         imageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                         leading: view.leadingAnchor,
-                         width: 100,
-                         height: 100,
-                         padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 0))
+                         centerX: view.centerXAnchor,
+                         width: 200,
+                         height: 200,
+                         padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
-        VStack.anchor(top: imageView.bottomAnchor,
-                      leading: imageView.leadingAnchor,
+        starButton.anchor(top: imageView.bottomAnchor,
+                          centerX: view.centerXAnchor,
+                          width: 50,
+                          height: 50,
+                          padding: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
+        
+        VStack.anchor(top: starButton.bottomAnchor,
+                      leading: view.leadingAnchor,
                       bottom: view.safeAreaLayoutGuide.bottomAnchor,
                       trailing: view.trailingAnchor,
-                      padding: UIEdgeInsets(top: 16, left: 0, bottom: 50, right: 20))
+                      padding: UIEdgeInsets(top: 16, left: 20, bottom: 50, right: 20))
+    }
+    
+    @objc private func didTapStar() {
+        
+        starButton.isSelected = !starButton.isSelected
+        
+        if starButton.isSelected {
+            
+            storageViewModel.savePokemon(with: pokemonResultViewModel)
+        } else {
+            
+            storageViewModel.removePokemon(id: pokemonResultViewModel.id)
+        }
     }
 }
