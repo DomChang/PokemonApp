@@ -31,6 +31,10 @@ class DetailViewController: UIViewController {
     
     private let starButton = UIButton()
     
+    private let backView = UIView()
+    
+    private let circleView = UIView()
+    
     private var storageViewModel: FavoriteViewModel
     
     private var pokemonResultViewModel: PokemonResultViewModel
@@ -88,6 +92,11 @@ class DetailViewController: UIViewController {
             
             guard let self = self else { return }
             
+            if let type = pokemonDetailViewModel?.type.first {
+               
+                self.view.backgroundColor = .paColor(name: type)
+            }
+            
             self.idLabel.text = pokemonDetailViewModel?.id
             
             self.heightLabel.text = pokemonDetailViewModel?.height
@@ -117,29 +126,40 @@ class DetailViewController: UIViewController {
     private func style() {
         
         idTitleLabel.text = "ID"
-        idTitleLabel.font = .systemFont(ofSize: 16)
+        idTitleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        idTitleLabel.textColor = .black
         
-        idLabel.font = .systemFont(ofSize: 16)
+        idLabel.font = .systemFont(ofSize: 18, weight: .heavy)
+        idLabel.textColor = .darkGray
         
         heightTitleLabel.text = "HEIGHT"
-        heightTitleLabel.font = .systemFont(ofSize: 16)
+        heightTitleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        heightTitleLabel.textColor = .black
         
-        heightLabel.font = .systemFont(ofSize: 16)
+        heightLabel.font = .systemFont(ofSize: 18, weight: .heavy)
+        heightLabel.textColor = .darkGray
         
         weightTitleLabel.text = "WEIGHT"
-        weightTitleLabel.font = .systemFont(ofSize: 16)
+        weightTitleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        weightTitleLabel.textColor = .black
         
-        weightLabel.font = .systemFont(ofSize: 16)
+        weightLabel.font = .systemFont(ofSize: 18, weight: .heavy)
+        weightLabel.textColor = .darkGray
         
-        typeTitleLabel.text = "TYPE"
-        typeTitleLabel.font = .systemFont(ofSize: 16)
+        typeTitleLabel.text = "TYPES"
+        typeTitleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        typeTitleLabel.textColor = .black
         
-        typeLabel.font = .systemFont(ofSize: 16)
+        typeLabel.font = .systemFont(ofSize: 18, weight: .heavy)
+        typeLabel.textColor = .darkGray
         
-        starButton.setImage(.systemAsset(.star), for: .normal)
+        starButton.setImage(.systemAsset(.starFill), for: .normal)
         starButton.setImage(.systemAsset(.starFill), for: .selected)
         starButton.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 30), forImageIn: .normal)
         starButton.tintColor = .darkGray
+        
+        backView.backgroundColor = .lightGray.withAlphaComponent(0.3)
+        circleView.backgroundColor = .darkGray
     }
     
     private func layout() {
@@ -168,6 +188,8 @@ class DetailViewController: UIViewController {
         VStack.axis = .vertical
         VStack.distribution = .fillEqually
         
+        view.addSubview(backView)
+        view.addSubview(circleView)
         view.addSubview(imageView)
         view.addSubview(starButton)
         view.addSubview(VStack)
@@ -176,19 +198,33 @@ class DetailViewController: UIViewController {
                          centerX: view.centerXAnchor,
                          width: 200,
                          height: 200,
-                         padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                         padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
         
         starButton.anchor(top: imageView.bottomAnchor,
                           centerX: view.centerXAnchor,
                           width: 50,
                           height: 50,
-                          padding: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
+                          padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
         
         VStack.anchor(top: starButton.bottomAnchor,
                       leading: view.leadingAnchor,
-                      bottom: view.safeAreaLayoutGuide.bottomAnchor,
                       trailing: view.trailingAnchor,
-                      padding: UIEdgeInsets(top: 16, left: 20, bottom: 50, right: 20))
+                      height: 200,
+                      padding: UIEdgeInsets(top: 16, left: 70, bottom: 0, right: 20))
+        
+        backView.anchor(top: starButton.centerYAnchor,
+                        leading: view.leadingAnchor,
+                        bottom: view.bottomAnchor,
+                        trailing: view.trailingAnchor)
+        
+        circleView.anchor(centerY: starButton.centerYAnchor,
+                          centerX: starButton.centerXAnchor,
+                          width: 70,
+                          height: 70)
+        
+        backView.layer.cornerRadius = 30
+        backView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        circleView.layer.cornerRadius = 35
     }
     
     @objc private func didTapStar() {
@@ -213,7 +249,7 @@ class DetailViewController: UIViewController {
             starButton.tintColor = .systemOrange
         } else {
             
-            starButton.tintColor = .darkGray
+            starButton.tintColor = .white
         }
     }
 }

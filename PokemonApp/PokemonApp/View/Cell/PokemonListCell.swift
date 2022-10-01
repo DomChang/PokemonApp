@@ -63,10 +63,10 @@ class PokemonListCell: UITableViewCell {
         pokemonImageView.contentMode = .scaleAspectFill
         pokemonImageView.clipsToBounds = true
         
-        idLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        idLabel.font = .systemFont(ofSize: 16, weight: .bold)
         idLabel.textColor = .darkGray
         
-        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        nameLabel.font = .systemFont(ofSize: 18, weight: .bold)
         nameLabel.textColor = .darkGray
         nameLabel.adjustsFontSizeToFitWidth = true
         

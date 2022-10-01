@@ -85,7 +85,7 @@ class HomeViewController: UIViewController {
     
     private func style() {
         
-        view.backgroundColor = .white
+        tableView.backgroundColor = .lightGray.withAlphaComponent(0.6)
         
         refreshControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
     }
@@ -131,14 +131,14 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             
         } else {
             
-            cell.isUserInteractionEnabled = true
-            
             let resultViewModel = viewModel.pokemonViewModels[indexPath.row]
             
             cell.configureCell(with: resultViewModel,
                                isStar: storageViewModel.checkIsStar(id: resultViewModel.id))
             
             cell.delegate = self
+            
+            cell.isUserInteractionEnabled = true
         }
         
         return cell
