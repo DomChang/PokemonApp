@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class DetailViewController: BaseViewController {
     
     private lazy var viewModel = DetailViewModel(pokemonUrl: pokemonResultViewModel.url)
     
@@ -35,16 +35,13 @@ class DetailViewController: UIViewController {
     
     private let circleView = UIView()
     
-    private var storageViewModel: FavoriteViewModel
+    private let indicatorView = UIActivityIndicatorView(style: .large)
     
     private var pokemonResultViewModel: PokemonResultViewModel
     
-    init(pokemonResultViewModel: PokemonResultViewModel,
-         storageViewModel: FavoriteViewModel) {
+    init(pokemonResultViewModel: PokemonResultViewModel) {
         
         self.pokemonResultViewModel = pokemonResultViewModel
-        
-        self.storageViewModel = storageViewModel
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -84,9 +81,16 @@ class DetailViewController: UIViewController {
         starButton.addTarget(self, action: #selector(didTapStar),
                              for: .touchUpInside)
         
-        starButton.isHidden = true
+        hideViews()
         
-        storageViewModel.fetchFavorite(completion: nil)
+        indicatorView.startAnimating()
+        
+        viewModel.fetchErrorHandler = { [weak self] error in
+            
+            self?.showAlertWithOK(title: "OOPs", message: "\(error)")
+        }
+        
+        favoriteViewModel.fetchFavorite(completion: nil)
         
         viewModel.pokemonViewModel.bind { [weak self] pokemonDetailViewModel in
             
@@ -107,16 +111,18 @@ class DetailViewController: UIViewController {
             
             if let id = self.viewModel.pokemonViewModel.value?.id {
                 
-                self.starButton.isSelected = self.storageViewModel.checkIsStar(id: id)
+                self.starButton.isSelected = self.favoriteViewModel.checkIsStar(id: id)
                 
                 self.updateStarButton()
             }
             
-            self.starButton.isHidden = false
+            self.showViews()
             
             let imageUrl = self.pokemonResultViewModel.imageUrl
             
             self.imageView.setImage(urlString: imageUrl, placeholderImage: .asset(.ball_placeholer))
+            
+            self.indicatorView.stopAnimating()
         }
         
         viewModel.fetchDetail()
@@ -193,6 +199,7 @@ class DetailViewController: UIViewController {
         view.addSubview(imageView)
         view.addSubview(starButton)
         view.addSubview(VStack)
+        view.addSubview(indicatorView)
         
         imageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          centerX: view.centerXAnchor,
@@ -222,6 +229,9 @@ class DetailViewController: UIViewController {
                           width: 70,
                           height: 70)
         
+        indicatorView.anchor(centerY: view.centerYAnchor,
+                             centerX: view.centerXAnchor)
+        
         backView.layer.cornerRadius = 30
         backView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         circleView.layer.cornerRadius = 35
@@ -233,10 +243,10 @@ class DetailViewController: UIViewController {
         
         if starButton.isSelected {
             
-            storageViewModel.savePokemon(with: pokemonResultViewModel)
+            favoriteViewModel.savePokemon(with: pokemonResultViewModel)
         } else {
             
-            storageViewModel.removePokemon(id: pokemonResultViewModel.id)
+            favoriteViewModel.removePokemon(id: pokemonResultViewModel.id)
         }
         
         updateStarButton()
@@ -251,5 +261,19 @@ class DetailViewController: UIViewController {
             
             starButton.tintColor = .white
         }
+    }
+    
+    private func hideViews() {
+        
+        backView.isHidden = true
+        circleView.isHidden = true
+        starButton.isHidden = true
+    }
+    
+    private func showViews() {
+        
+        backView.isHidden = false
+        circleView.isHidden = false
+        starButton.isHidden = false
     }
 }

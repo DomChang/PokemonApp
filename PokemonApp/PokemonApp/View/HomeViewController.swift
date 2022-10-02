@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: BaseViewController {
     
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -15,8 +15,6 @@ class HomeViewController: UIViewController {
     
     private let viewModel = HomeViewModel()
     
-    private let storageViewModel = FavoriteViewModel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,7 +26,7 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        storageViewModel.fetchFavorite {
+        favoriteViewModel.fetchFavorite {
             
             DispatchQueue.main.async {
                 
@@ -50,13 +48,6 @@ class HomeViewController: UIViewController {
         
         tableView.delegate = self
         
-        viewModel.startRefreshHandler = {
-            
-            DispatchQueue.main.async {
-                self.refreshControl.beginRefreshing()
-            }
-        }
-        
         viewModel.endRefreshHandler = {
             
             DispatchQueue.main.async {
@@ -64,18 +55,17 @@ class HomeViewController: UIViewController {
             }
         }
         
-        viewModel.indexPathToReload.bind { [weak self] newIndexPathsToReload in
+        viewModel.fetchErrorHandler = { [weak self] error in
             
-            guard let self = self else { return }
+            self?.showAlertWithOK(title: "OOPs", message: "\(error)")
+        }
+        
+        viewModel.pokemonViewModels.bind { _ in
             
-            guard !newIndexPathsToReload.isEmpty else {
+            DispatchQueue.main.async {
                 
                 self.tableView.reloadData()
-                
-                return 
             }
-            
-            self.tableView.reloadRows(at: newIndexPathsToReload, with: .fade)
         }
         
         viewModel.fetchData()
@@ -105,14 +95,16 @@ class HomeViewController: UIViewController {
         
         viewModel.fetchData()
         
-        storageViewModel.fetchFavorite(completion: nil)
+        favoriteViewModel.fetchFavorite(completion: nil)
     }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.totalCount
+        
+        viewModel.totalCount > viewModel.currentCount ?
+        viewModel.currentCount + 19 : viewModel.totalCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -131,16 +123,15 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             
         } else {
             
-            let resultViewModel = viewModel.pokemonViewModels[indexPath.row]
+            let resultViewModel = viewModel.pokemonViewModels.value[indexPath.row]
             
             cell.configureCell(with: resultViewModel,
-                               isStar: storageViewModel.checkIsStar(id: resultViewModel.id))
+                               isStar: favoriteViewModel.checkIsStar(id: resultViewModel.id))
             
             cell.delegate = self
             
             cell.isUserInteractionEnabled = true
         }
-        
         return cell
     }
     
@@ -150,10 +141,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let pokemonViewModel = viewModel.pokemonViewModels[indexPath.row]
+        let pokemonViewModel = viewModel.pokemonViewModels.value[indexPath.row]
         
-        let detailVC = DetailViewController(pokemonResultViewModel: pokemonViewModel,
-                                            storageViewModel: storageViewModel)
+        let detailVC = DetailViewController(pokemonResultViewModel: pokemonViewModel)
         
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -163,14 +153,17 @@ extension HomeViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
+        print(indexPaths)
+        
         if indexPaths.contains(where: isLoadingCell) {
             
             viewModel.fetchData()
+
         }
     }
     
     private func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        
+
         indexPath.row >= viewModel.currentCount
     }
 }
@@ -185,10 +178,10 @@ extension HomeViewController: PokemonListCellDelegate {
         
         if isStar {
             
-            storageViewModel.savePokemon(with: pokemonResultViewModel)
+            favoriteViewModel.savePokemon(with: pokemonResultViewModel)
         } else {
             
-            storageViewModel.removePokemon(id: pokemonResultViewModel.id)
+            favoriteViewModel.removePokemon(id: pokemonResultViewModel.id)
         }
     }
 }

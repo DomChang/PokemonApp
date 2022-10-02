@@ -7,11 +7,9 @@
 
 import UIKit
 
-class FavoriteViewController: UIViewController {
+class FavoriteViewController: BaseViewController {
     
     private let tableView = UITableView()
-    
-    private let viewModel = FavoriteViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +22,7 @@ class FavoriteViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewModel.fetchFavorite {
+        favoriteViewModel.fetchFavorite {
             
             DispatchQueue.main.async {
                 
@@ -61,7 +59,7 @@ extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        viewModel.favoritePokemonViewModels.count
+        favoriteViewModel.favoritePokemonViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -72,7 +70,7 @@ extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate {
             fatalError("Cannot dequeue PokemonListCell")
         }
         
-        let resultViewModel = viewModel.favoritePokemonViewModels[indexPath.row]
+        let resultViewModel = favoriteViewModel.favoritePokemonViewModels[indexPath.row]
         
         cell.configureCell(with: resultViewModel, isStar: true)
         
@@ -83,10 +81,9 @@ extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let pokemonViewModel = viewModel.favoritePokemonViewModels[indexPath.row]
+        let pokemonViewModel = favoriteViewModel.favoritePokemonViewModels[indexPath.row]
         
-        let detailVC = DetailViewController(pokemonResultViewModel: pokemonViewModel,
-                                            storageViewModel: viewModel)
+        let detailVC = DetailViewController(pokemonResultViewModel: pokemonViewModel)
         
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -103,7 +100,7 @@ extension FavoriteViewController: PokemonListCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell),
               let id = cell.pokemonResultViewModel?.id else { return }
         
-        viewModel.removePokemon(id: id)
+        favoriteViewModel.removePokemon(id: id)
         
         tableView.deleteRows(at: [indexPath], with: .left)
     }

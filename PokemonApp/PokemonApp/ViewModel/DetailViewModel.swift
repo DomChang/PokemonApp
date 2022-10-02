@@ -13,6 +13,8 @@ class DetailViewModel {
     
     var pokemonUrl: String
     
+    var fetchErrorHandler: ((Error) -> Void)?
+    
     init(pokemonUrl: String) {
         
         self.pokemonUrl = pokemonUrl
@@ -34,7 +36,7 @@ class DetailViewModel {
                 
             case .failure(let error):
                 
-                print("fetchData.failure: \(error)")
+                self.fetchErrorHandler?(error)
             }
         }
     }
