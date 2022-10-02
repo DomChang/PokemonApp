@@ -33,31 +33,32 @@ class FavoriteViewModel {
                 
             case .failure(let error):
                 
-                print("fetchLSData.failure: \(error)")
+                self.errorHandler?(error)
             }
         }
     }
     
     func savePokemon(with pokemonResultViewModel: PokemonResultViewModel) {
-        
-        fetchFavorite {
             
-            guard !self.lsPokemons.contains(where: { $0.id == pokemonResultViewModel.id }) else { return }
-            
-            StorageManager.shared.savePokemonInFavorite(with: pokemonResultViewModel) { result in
+        guard !self.favoritePokemonViewModels.contains(where: { $0.id == pokemonResultViewModel.id })
                 
-                switch result {
-                    
-                case .success:
-                    
-                    self.completeHandler?("Save Success")
-                    
-                    self.favoritePokemonViewModels.append(pokemonResultViewModel)
-                    
-                case .failure(let error):
-                    
-                    self.errorHandler?(error)
-                }
+        else {
+            return
+        }
+        
+        StorageManager.shared.savePokemonInFavorite(with: pokemonResultViewModel) { result in
+            
+            switch result {
+                
+            case .success:
+                
+                self.completeHandler?("Save Success")
+                
+                self.favoritePokemonViewModels.append(pokemonResultViewModel)
+                
+            case .failure(let error):
+                
+                self.errorHandler?(error)
             }
         }
     }

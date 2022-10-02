@@ -38,23 +38,17 @@ class HTTPClient {
         completion: @escaping (Result<Data, Error>) -> Void
     ) {
         
-        let parameters: [String: String]?
+        var parameters: [String: String] = [:]
         
-        switch paging == nil {
+        guard var component = URLComponents(string: baseUrl) else {
             
-        case true:
-            parameters = nil
-            
-        case false:
-            parameters = ["limit": "20",
-                          "offset": String(20 * paging!)]
+            return completion(.failure(HTTPError.urlError))
         }
         
-        guard var component = URLComponents(string: baseUrl)
-                
-        else { return completion(.failure(HTTPError.urlError)) }
-        
-        if let parameters = parameters {
+        if let paging = paging {
+            
+            parameters = ["limit": "20",
+                          "offset": String(20 * paging)]
             
             component.queryItems = parameters.map { (key, value) in
                 

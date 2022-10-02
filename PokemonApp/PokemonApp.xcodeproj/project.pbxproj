@@ -13,6 +13,9 @@
 		B63D1A9D28E8366500BFE186 /* LSPokemon+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1A9B28E8366500BFE186 /* LSPokemon+CoreDataProperties.swift */; };
 		B63D1A9F28E8886B00BFE186 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */; };
 		B63D1AA128E8A87900BFE186 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1AA028E8A87900BFE186 /* UIColor+Extension.swift */; };
+		B63D1AA528E99E0B00BFE186 /* UIAlertAction+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1AA428E99E0B00BFE186 /* UIAlertAction+Extension.swift */; };
+		B63D1AA828E9A3B100BFE186 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1AA728E9A3B100BFE186 /* BaseViewController.swift */; };
+		B63D1AAD28E9A7D900BFE186 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63D1AAC28E9A7D900BFE186 /* UIViewController+Extension.swift */; };
 		B645904C28E5CCD000BDE6C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645904B28E5CCD000BDE6C0 /* AppDelegate.swift */; };
 		B645904E28E5CCD000BDE6C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645904D28E5CCD000BDE6C0 /* SceneDelegate.swift */; };
 		B645905028E5CCD000BDE6C0 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645904F28E5CCD000BDE6C0 /* TabBarViewController.swift */; };
@@ -46,6 +49,9 @@
 		B63D1A9B28E8366500BFE186 /* LSPokemon+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LSPokemon+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		B63D1AA028E8A87900BFE186 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		B63D1AA428E99E0B00BFE186 /* UIAlertAction+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertAction+Extension.swift"; sourceTree = "<group>"; };
+		B63D1AA728E9A3B100BFE186 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		B63D1AAC28E9A7D900BFE186 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		B645904828E5CCD000BDE6C0 /* PokemonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B645904B28E5CCD000BDE6C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B645904D28E5CCD000BDE6C0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +91,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B63D1AA928E9A3B800BFE186 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				B63D1AA728E9A3B100BFE186 /* BaseViewController.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		B645903F28E5CCD000BDE6C0 = {
 			isa = PBXGroup;
 			children = (
@@ -106,8 +120,8 @@
 			children = (
 				B645906E28E68C5D00BDE6C0 /* Extension */,
 				B645906928E5E43400BDE6C0 /* Resource */,
-				B645906528E5DB3500BDE6C0 /* Network */,
 				B6B9C7E128E7F1D400F7CB5F /* Local Storage */,
+				B645906528E5DB3500BDE6C0 /* Network */,
 				B645907B28E69E6900BDE6C0 /* Util */,
 				B645906228E5D07000BDE6C0 /* Model */,
 				B645907328E68CE700BDE6C0 /* View */,
@@ -164,6 +178,8 @@
 				B6B9C7DF28E7E9B500F7CB5F /* UIImage+Extension.swift */,
 				B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */,
 				B63D1AA028E8A87900BFE186 /* UIColor+Extension.swift */,
+				B63D1AA428E99E0B00BFE186 /* UIAlertAction+Extension.swift */,
+				B63D1AAC28E9A7D900BFE186 /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -171,11 +187,12 @@
 		B645907328E68CE700BDE6C0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B63D1AA928E9A3B800BFE186 /* Base */,
 				B645908028E6A12300BDE6C0 /* Cell */,
-				B645904F28E5CCD000BDE6C0 /* TabBarViewController.swift */,
 				B645907528E6903400BDE6C0 /* HomeViewController.swift */,
 				B645908128E6CAA600BDE6C0 /* DetailViewController.swift */,
 				B63D1A9028E81D7E00BFE186 /* FavoriteViewController.swift */,
+				B645904F28E5CCD000BDE6C0 /* TabBarViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -301,6 +318,7 @@
 				B6B9C7E628E7F4B100F7CB5F /* PokemonApp.xcdatamodeld in Sources */,
 				B645906B28E5E45100BDE6C0 /* PAConstant.swift in Sources */,
 				B6B9C7E028E7E9B500F7CB5F /* UIImage+Extension.swift in Sources */,
+				B63D1AAD28E9A7D900BFE186 /* UIViewController+Extension.swift in Sources */,
 				B645907028E68C7A00BDE6C0 /* UIView+Extension.swift in Sources */,
 				B645906828E5DB6300BDE6C0 /* HTTPClient.swift in Sources */,
 				B63D1A9328E81F6600BFE186 /* FavoriteViewModel.swift in Sources */,
@@ -314,9 +332,11 @@
 				B645908828E6EC4B00BDE6C0 /* UIImageView+Extension.swift in Sources */,
 				B645904C28E5CCD000BDE6C0 /* AppDelegate.swift in Sources */,
 				B63D1A9F28E8886B00BFE186 /* Notification+Extension.swift in Sources */,
+				B63D1AA528E99E0B00BFE186 /* UIAlertAction+Extension.swift in Sources */,
 				B63D1A9128E81D7E00BFE186 /* FavoriteViewController.swift in Sources */,
 				B645904E28E5CCD000BDE6C0 /* SceneDelegate.swift in Sources */,
 				B63D1A9C28E8366500BFE186 /* LSPokemon+CoreDataClass.swift in Sources */,
+				B63D1AA828E9A3B100BFE186 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

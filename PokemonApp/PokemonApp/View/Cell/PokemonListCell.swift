@@ -18,7 +18,7 @@ class PokemonListCell: UITableViewCell {
     
     weak var delegate: PokemonListCellDelegate?
     
-    private let idLabel = UILabel()
+    let idLabel = UILabel()
     
     private let nameLabel = UILabel()
     
@@ -43,7 +43,7 @@ class PokemonListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        configureCell(with: .none, isStar: false)
+        configureCell(with: nil, isStar: false)
         
         starButton.tintColor = .darkGray
     }
@@ -139,7 +139,7 @@ class PokemonListCell: UITableViewCell {
                 
                 self.starButton.isHidden = true
                 
-                self.pokemonImageView.image = nil
+                self.pokemonImageView.image = .asset(.ball_placeholer)
                 
                 self.indicatorView.startAnimating()
             }
