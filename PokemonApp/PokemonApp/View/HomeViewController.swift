@@ -153,8 +153,6 @@ extension HomeViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
-        print(indexPaths)
-        
         if indexPaths.contains(where: isLoadingCell) {
             
             viewModel.fetchData()
