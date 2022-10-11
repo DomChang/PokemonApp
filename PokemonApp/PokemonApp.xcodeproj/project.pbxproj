@@ -36,7 +36,7 @@
 		B645908228E6CAA600BDE6C0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645908128E6CAA600BDE6C0 /* DetailViewController.swift */; };
 		B645908428E6CC1B00BDE6C0 /* PokemonDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645908328E6CC1B00BDE6C0 /* PokemonDetailViewModel.swift */; };
 		B645908628E6CE4100BDE6C0 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645908528E6CE4100BDE6C0 /* DetailViewModel.swift */; };
-		B645908828E6EC4B00BDE6C0 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B645908728E6EC4B00BDE6C0 /* UIImageView+Extension.swift */; };
+		B65EB52728F52FCB005D2E1F /* CacheImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65EB52628F52FCB005D2E1F /* CacheImageView.swift */; };
 		B6B9C7E028E7E9B500F7CB5F /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B9C7DF28E7E9B500F7CB5F /* UIImage+Extension.swift */; };
 		B6B9C7E328E7F1FC00F7CB5F /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B9C7E228E7F1FC00F7CB5F /* StorageManager.swift */; };
 		B6B9C7E628E7F4B100F7CB5F /* PokemonApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6B9C7E428E7F4B100F7CB5F /* PokemonApp.xcdatamodeld */; };
@@ -74,7 +74,7 @@
 		B645908128E6CAA600BDE6C0 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		B645908328E6CC1B00BDE6C0 /* PokemonDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModel.swift; sourceTree = "<group>"; };
 		B645908528E6CE4100BDE6C0 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
-		B645908728E6EC4B00BDE6C0 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		B65EB52628F52FCB005D2E1F /* CacheImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheImageView.swift; sourceTree = "<group>"; };
 		B6B9C7DF28E7E9B500F7CB5F /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B6B9C7E228E7F1FC00F7CB5F /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		B6B9C7E528E7F4B100F7CB5F /* PokemonApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PokemonApp.xcdatamodel; sourceTree = "<group>"; };
@@ -94,6 +94,7 @@
 		B63D1AA928E9A3B800BFE186 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				B65EB52628F52FCB005D2E1F /* CacheImageView.swift */,
 				B63D1AA728E9A3B100BFE186 /* BaseViewController.swift */,
 			);
 			path = Base;
@@ -174,7 +175,6 @@
 			children = (
 				B645906F28E68C7A00BDE6C0 /* UIView+Extension.swift */,
 				B645907128E68CAC00BDE6C0 /* UITableViewCell+Extension.swift */,
-				B645908728E6EC4B00BDE6C0 /* UIImageView+Extension.swift */,
 				B6B9C7DF28E7E9B500F7CB5F /* UIImage+Extension.swift */,
 				B63D1A9E28E8886B00BFE186 /* Notification+Extension.swift */,
 				B63D1AA028E8A87900BFE186 /* UIColor+Extension.swift */,
@@ -329,8 +329,8 @@
 				B645907628E6903400BDE6C0 /* HomeViewController.swift in Sources */,
 				B645908628E6CE4100BDE6C0 /* DetailViewModel.swift in Sources */,
 				B645907A28E69DC400BDE6C0 /* PokemonResultViewModel.swift in Sources */,
-				B645908828E6EC4B00BDE6C0 /* UIImageView+Extension.swift in Sources */,
 				B645904C28E5CCD000BDE6C0 /* AppDelegate.swift in Sources */,
+				B65EB52728F52FCB005D2E1F /* CacheImageView.swift in Sources */,
 				B63D1A9F28E8886B00BFE186 /* Notification+Extension.swift in Sources */,
 				B63D1AA528E99E0B00BFE186 /* UIAlertAction+Extension.swift in Sources */,
 				B63D1A9128E81D7E00BFE186 /* FavoriteViewController.swift in Sources */,

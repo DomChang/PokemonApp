@@ -15,7 +15,7 @@ class DetailViewController: BaseViewController {
     
     private let idLabel = UILabel()
     
-    private let imageView = UIImageView()
+    private let imageView = CacheImageView()
     
     private let heightTitleLabel = UILabel()
     
@@ -120,7 +120,7 @@ class DetailViewController: BaseViewController {
             
             let imageUrl = self.pokemonResultViewModel.imageUrl
             
-            self.imageView.setImage(urlString: imageUrl, placeholderImage: .asset(.ball_placeholer))
+            self.imageView.loadImage(urlString: imageUrl)
             
             self.indicatorView.stopAnimating()
         }

@@ -24,7 +24,7 @@ class PokemonListCell: UITableViewCell {
     
     private let starButton = UIButton()
     
-    private let pokemonImageView = UIImageView()
+    private let pokemonImageView = CacheImageView()
     
     private let indicatorView = UIActivityIndicatorView()
 
@@ -115,34 +115,27 @@ class PokemonListCell: UITableViewCell {
             
             self.pokemonResultViewModel = viewModel
             
-            pokemonImageView.setImage(urlString: viewModel.imageUrl,
-                                      placeholderImage: .asset(.ball_placeholer))
+            pokemonImageView.loadImage(urlString: viewModel.imageUrl)
             
-            DispatchQueue.main.async {
-                
-                self.idLabel.text = "# " + viewModel.id
-                
-                self.nameLabel.text = viewModel.name
-                
-                self.starButton.isHidden = false
-                
-                self.indicatorView.stopAnimating()
-            }
+            self.idLabel.text = "# " + viewModel.id
+            
+            self.nameLabel.text = viewModel.name
+            
+            self.starButton.isHidden = false
+            
+            self.indicatorView.stopAnimating()
             
         } else {
             
-            DispatchQueue.main.async {
-                
-                self.idLabel.text = ""
-                
-                self.nameLabel.text = ""
-                
-                self.starButton.isHidden = true
-                
-                self.pokemonImageView.image = .asset(.ball_placeholer)
-                
-                self.indicatorView.startAnimating()
-            }
+            self.idLabel.text = ""
+            
+            self.nameLabel.text = ""
+            
+            self.starButton.isHidden = true
+            
+            self.pokemonImageView.image = .asset(.ball_placeholer)
+            
+            self.indicatorView.startAnimating()
         }
         
         starButton.isSelected = isStar

@@ -117,7 +117,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         
         if isLoadingCell(for: indexPath) {
             
-            cell.configureCell(with: .none, isStar: false)
+            cell.configureCell(with: nil, isStar: false)
             
             cell.isUserInteractionEnabled = false
             
