@@ -34,6 +34,9 @@ extension UIViewController {
         
         alerContorller.addAction(.okAction)
         
-        self.present(alerContorller, animated: true)
+        DispatchQueue.main.async {
+            
+            self.present(alerContorller, animated: true)
+        }
     }
 }
